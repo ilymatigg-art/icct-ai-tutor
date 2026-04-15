@@ -116,40 +116,46 @@ h2 {
 }
 
 /* ==========================================
-   5. INPUT AREA
+   5. INPUT AREA - ANDROID STABILITY FIX
    ========================================== */
 .input-area {
-    padding: 10px 15px;
+    padding: 10px; /* Reduced padding for more internal space */
     background: white;
     border-top: 1px solid #eee;
     display: flex;
-    gap: 10px;
+    flex-direction: row; /* Force horizontal alignment */
+    align-items: center; 
+    gap: 8px;
     border-radius: 0 0 12px 12px;
-    align-items: center; /* Keeps button and text box perfectly leveled */
-    min-height: auto;    /* Prevents the area from collapsing on mobile */
+    min-height: 70px;
+    box-sizing: border-box;
 }
 
 #user-input {
     flex: 1;
-    padding: 14px 20px;
+    height: 45px; /* Fixed height matching the button */
+    padding: 0 20px;
     border: 2px solid #e1e4e8;
-    border-radius: 30px;
+    border-radius: 25px;
     outline: none;
-    font-size: 1rem;
-    height: 50px; /* Fixed height for consistency */
+    font-size: 16px; /* 16px prevents iOS/Android auto-zoom on focus */
+    box-sizing: border-box;
 }
 
 button {
-    height: 50px; /* Matches the input height exactly */
-    padding: 0 25px;
+    height: 45px; /* Matches input height exactly */
+    padding: 0 20px;
     background-color: #ffcc00; 
     color: #003366; 
     border: none;
-    border-radius: 30px;
+    border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
-    white-space: nowrap; /* Prevents text from breaking/stacking */
-    transition: transform 0.2s ease;
+    flex-shrink: 0; /* CRITICAL: Stops button from squishing or moving */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 button:active {
@@ -343,5 +349,17 @@ button:active {
     /* Hide the website buttons on mobile to save space if needed */
     .link-grid {
         display: none; 
+    }
+}
+
+@media (max-width: 768px) {
+    .input-area {
+        flex-wrap: nowrap !important; /* Prevents button from dropping down */
+        padding: 8px 12px;
+    }
+    
+    button {
+        padding: 0 15px; /* Slightly narrower button for more input space */
+        font-size: 0.9rem;
     }
 }
