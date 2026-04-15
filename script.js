@@ -41,13 +41,27 @@ async function sendMessage() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 model: "llama-3.3-70b-versatile",
-                temperature: 0.7,
+                temperature: 0.5, // Reduced for higher reliability/logic
                 messages: [
                     {
                         role: "system",
-                        content: `You are ICCT AI Tutor. Created ONLY by Christian Mati. 
-                        Help students learn step-by-step. Never mention OpenAI or Google. 
-                        If asked who created you, say Christian Mati.`
+                        content: `You are ICCT AI Tutor, a genius academic assistant created ONLY by Christian Mati.
+                        
+                        ICCT COLLEGES KNOWLEDGE BASE:
+                        - Tertiary education provider in Rizal, Philippines.
+                        - Campuses: Cainta, Sumulong (Cainta), San Mateo, Cogeo, Antipolo, Taytay, Binangonan, and Angono.
+                        - Offerings: Arts & Sciences, Business, Computer, Criminology, Education, Engineering, Health Sciences, Hospitality & Tourism Management, Short Term/Certificate Programs, and Senior High School (Grade 11 & 12).
+                        - Accreditation: CHED, TESDA, DepEd.
+                        - Core Belief: "Quality education should not be expensive." Tuition is affordable at P130 per unit.
+                        - Vision: To become the leading premier provider of higher education in Asia.
+                        - Mission: To prepare students for technological efficiency through research and value-based training.
+
+                        TEACHING RULES:
+                        1. Help students LEARN. Explain step-by-step using "Chain of Thought" logic.
+                        2. Never mention OpenAI, Google, Meta, or APIs.
+                        3. If asked who created you, say: "I was created by Christian Mati as an academic AI tutor."
+                        4. If asked "What are you": Say: "I am an AI tutor designed to help students learn step-by-step."
+                        5. Use the Socratic method: Ask guiding questions instead of just giving answers.`
                     },
                     ...chatHistory
                 ]
@@ -70,18 +84,17 @@ async function sendMessage() {
             let aiReply = data.choices[0].message.content;
 
             // Strict Identity Check
-            const forbidden = ["openai", "google", "meta", "chatgpt", "assistant"];
+            const forbidden = ["openai", "google", "meta", "chatgpt"];
             if (forbidden.some(word => aiReply.toLowerCase().includes(word))) {
                 aiReply = "I am ICCT AI Tutor, created by Christian Mati to help you learn.";
             }
 
             // H. Render Markdown using Marked.js
-            // Wrap in try-catch to prevent crash if marked is missing
             let formattedReply;
             try {
                 formattedReply = marked.parse(aiReply);
             } catch (e) {
-                formattedReply = aiReply; // Fallback to plain text
+                formattedReply = aiReply; 
             }
 
             chatBox.innerHTML += `<div class="ai-msg"><b>AI:</b> ${formattedReply}</div>`;
@@ -91,7 +104,7 @@ async function sendMessage() {
         }
 
     } catch (err) {
-        // Handle Errors (Connection, 404, or Server Crash)
+        // Handle Errors
         const loadingElement = document.getElementById(loadingId);
         if (loadingElement) loadingElement.remove();
 
@@ -108,7 +121,7 @@ async function sendMessage() {
 }
 
 // ==========================================
-// 3. KEYBOARD SUPPORT (Press Enter to Send)
+// 3. KEYBOARD SUPPORT
 // ==========================================
 document.getElementById("user-input").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
