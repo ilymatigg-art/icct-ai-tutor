@@ -1,10 +1,14 @@
 require("dotenv").config();
-
 const express = require("express");
 const fetch = require("node-fetch");
 const cors = require("cors");
 
 const app = express();
+
+// --- THE FINAL FIX ---
+// This line tells Render to show your index.html, style.css, and script.js
+app.use(express.static("./")); 
+// ---------------------
 
 app.use(cors());
 app.use(express.json());
