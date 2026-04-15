@@ -119,12 +119,14 @@ h2 {
    5. INPUT AREA
    ========================================== */
 .input-area {
-    padding: 20px;
+    padding: 15px 20px;
     background: white;
     border-top: 1px solid #eee;
     display: flex;
     gap: 12px;
     border-radius: 0 0 12px 12px;
+    align-items: center; /* Keeps button and text box perfectly leveled */
+    min-height: 80px;    /* Prevents the area from collapsing on mobile */
 }
 
 #user-input {
@@ -134,9 +136,11 @@ h2 {
     border-radius: 30px;
     outline: none;
     font-size: 1rem;
+    height: 50px; /* Fixed height for consistency */
 }
 
 button {
+    height: 50px; /* Matches the input height exactly */
     padding: 0 25px;
     background-color: #ffcc00; 
     color: #003366; 
@@ -144,6 +148,12 @@ button {
     border-radius: 30px;
     cursor: pointer;
     font-weight: bold;
+    white-space: nowrap; /* Prevents text from breaking/stacking */
+    transition: transform 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.95); /* Adds a nice "click" feel on Android/iOS */
 }
 
 /* ==========================================
@@ -278,55 +288,61 @@ button {
 }
 
 /* ==========================================
-   MOBILE OPTIMIZED GUI (768px and below)
+   FIXED MOBILE RESPONSIVENESS
    ========================================== */
 @media (max-width: 768px) {
     body {
-        flex-direction: column; /* Stacks Dashboard on top of Chat */
-        height: 100vh;
-        overflow-y: auto; /* Allows scrolling between sections */
+        flex-direction: column;
+        justify-content: flex-start; /* Aligns items from the top */
+        height: 100vh; /* Keeps the body strictly to the screen height */
         padding: 10px;
-        justify-content: flex-start;
-        gap: 15px;
+        overflow: hidden; /* Prevents the whole page from wobbling */
     }
 
-    /* 1. Dashboard Sidebar Fix */
     .dashboard-sidebar {
-        width: 100%; /* Takes full phone width */
+        width: 100%;
         height: auto;
-        min-height: unset;
-        padding: 15px;
-        order: 1; /* Ensures it stays at the top */
+        max-height: 25vh; /* Restricted: Notes only take up 1/4 of the screen */
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
+    .note-section {
+        max-height: 100px; /* Small scrollable area for notes */
+        overflow-y: auto;
+    }
+
+    .chat-container {
+        width: 100%;
+        flex: 1; /* This forces the chat box to fill the remaining space */
+        height: auto;
+        max-height: 65vh;
     }
 
     .dash-header {
-        min-height: 60px;
-        padding: 10px;
-        font-size: 0.95rem;
+        padding: 8px;
+        min-height: 50px; /* Smaller header for mobile */
     }
 
     .logo-badge {
-        width: 45px;
-        height: 45px;
+        width: 35px;
+        height: 35px;
     }
 
-    /* 2. Chat Container Fix */
-    .chat-container {
-        width: 100%;
-        height: 600px; /* Gives the chat area its own height */
-        max-width: 100%;
-        order: 2; /* Stays below the dashboard */
+    /* Fix for the Send Button escaping */
+    .input-area {
+        padding: 10px;
+        gap: 8px;
+        flex-wrap: nowrap; /* Forces input and button to stay on one line */
     }
 
-    /* 3. Button Grid Fix */
-    .link-grid {
-        grid-template-columns: 1fr; /* Buttons stack on top of each other */
-        margin-top: 15px;
-    }
-
-    .link-btn {
-        width: 100%;
-        padding: 12px;
+    #user-input {
+        padding: 10px 15px;
         font-size: 0.9rem;
+    }
+
+    button {
+        padding: 0 15px;
+        white-space: nowrap; /* Prevents button text from breaking */
     }
 }
