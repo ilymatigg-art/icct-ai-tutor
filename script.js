@@ -19,16 +19,23 @@ async function sendMessage() {
 
     // 2. Add a "Loading" placeholder with a unique ID
     const loadingId = "loading-" + Date.now();
-    chatBox.innerHTML += `<div class="ai-msg" id="${loadingId}"><b>AI:</b> <i>ICCT Tutor is thinking...</i></div>`;
+    chatBox.innerHTML += `
+        <div class="ai-msg" id="${loadingId}">
+            <b>AI:</b> <i>ICCT Tutor is thinking...</i>
+        </div>
+    `;
+    
+    // Auto-scroll to bottom
     chatBox.scrollTop = chatBox.scrollHeight;
 
     // Add to memory
     chatHistory.push({ role: "user", content: userInput });
 
-    // Keep memory small
+    // Keep memory small (prevents performance issues)
     if (chatHistory.length > 8) chatHistory.shift();
 
     try {
+        // CHANGED: Using your official Render URL
         const response = await fetch("https://icct-ai-tutor.onrender.com/chat", {
             method: "POST",
             headers: {
@@ -93,14 +100,14 @@ IF ASKED "WHAT ARE YOU":
 
         const data = await response.json();
 
-        // 3. Remove the "Loading" message
+        // 3. Remove the "Loading" message before showing the real answer
         const loadingElement = document.getElementById(loadingId);
         if (loadingElement) loadingElement.remove();
 
         if (data.choices && data.choices.length > 0) {
             let aiReply = data.choices[0].message.content;
 
-            // OUTPUT FILTER
+            // OUTPUT FILTER: Double check the AI doesn't break character
             if (
                 aiReply.toLowerCase().includes("openai") ||
                 aiReply.toLowerCase().includes("google") ||
@@ -111,24 +118,25 @@ IF ASKED "WHAT ARE YOU":
             }
 
             // 4. USE MARKED.JS TO FORMAT THE REPLY
-            // This turns AI text into bold, lists, and code blocks
+            // This renders bold text, bullet points, and code snippets correctly
             const formattedReply = marked.parse(aiReply);
 
             // Show AI message
             chatBox.innerHTML += `<div class="ai-msg"><b>AI:</b> ${formattedReply}</div>`;
 
-            // Save AI memory
+            // Save AI response to memory
             chatHistory.push({ role: "assistant", content: aiReply });
         }
 
     } catch (err) {
-        // Remove loading even if it fails
+        // Clean up loading message if there is an error
         const loadingElement = document.getElementById(loadingId);
         if (loadingElement) loadingElement.remove();
 
-        chatBox.innerHTML += `<div style="color:red"><b>Error:</b> Cannot connect to server. Did you start 'node server.js'?</div>`;
-        console.error(err);
+        chatBox.innerHTML += `<div style="color:red"><b>Error:</b> Cannot connect to the server. Please check your connection.</div>`;
+        console.error("Fetch error:", err);
     }
 
+    // Final scroll to bottom
     chatBox.scrollTop = chatBox.scrollHeight;
 }
