@@ -9,31 +9,46 @@
 }
 
 body {
-    background-color: #f0f2f5;
+    /* Step 1: Subtle dark overlay so the white container pops */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+                      url('bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     overflow: hidden;
+    
+    /* NEW: Added padding to give the sidebars breathing room */
+    padding: 20px;
+    gap: 20px;
 }
 
 /* ==========================================
    2. MAIN CONTAINER
    ========================================== */
 .chat-container {
-    width: 100%;
-    max-width: 800px;
+    /* Fixed: Changed width to flex so it shares space with the dashboard */
+    flex: 1; 
+    max-width: 850px;
     height: 90vh;
-    background: #ffffff;
+    /* Increased opacity to 0.95 so text is much clearer */
+    background: rgba(255, 255, 255, 0.95); 
+    backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 h2 {
     padding: 20px;
-    background-color: #003366; /* ICCT Navy Blue */
+    background-color: #003366; 
     color: white;
     text-align: center;
     font-weight: 600;
@@ -51,56 +66,57 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background: #f8f9fa;
+    background: transparent;
 }
 
-/* Base style for all messages */
 .user-msg, .ai-msg {
-    max-width: 80%;
-    padding: 12px 18px;
+    max-width: 85%;
+    padding: 14px 20px;
     line-height: 1.6;
     font-size: 1rem;
     animation: fadeIn 0.3s ease-in;
 }
 
-/* User Bubble (Right Side) */
 .user-msg {
     align-self: flex-end;
     background-color: #0056b3;
     color: white;
     border-radius: 18px 18px 0 18px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3);
 }
 
-/* AI Bubble (Left Side) */
 .ai-msg {
     align-self: flex-start;
-    background-color: white;
-    color: #333;
+    background-color: #ffffff;
+    color: #222; /* Darker text for better readability */
     border-radius: 18px 18px 18px 0;
-    border: 1px solid #e1e4e8;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-/* Markdown styling within AI messages */
-.ai-msg pre {
-    background: #2d2d2d;
-    color: #f8f8f2;
-    padding: 10px;
-    border-radius: 8px;
-    overflow-x: auto;
-    margin: 10px 0;
-}
-
-.ai-msg code {
-    font-family: 'Courier New', Courier, monospace;
-    background: #eee;
-    padding: 2px 4px;
-    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    /* Stronger shadow so it doesn't blend into the background */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 /* ==========================================
-   4. INPUT AREA
+   4. HIGH-VISIBILITY CODE BLOCKS
+   ========================================== */
+.ai-msg pre {
+    background: #1e1e1e !important; 
+    color: #ffffff !important;       
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 15px 0;
+    border: 1px solid #444;
+}
+
+.ai-msg code {
+    font-family: 'Consolas', monospace;
+    font-size: 0.95rem;
+    background: transparent; 
+    color: inherit;          
+}
+
+/* ==========================================
+   5. INPUT AREA
    ========================================== */
 .input-area {
     padding: 20px;
@@ -108,6 +124,7 @@ h2 {
     border-top: 1px solid #eee;
     display: flex;
     gap: 12px;
+    border-radius: 0 0 12px 12px;
 }
 
 #user-input {
@@ -117,46 +134,145 @@ h2 {
     border-radius: 30px;
     outline: none;
     font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-#user-input:focus {
-    border-color: #ffcc00; /* ICCT Gold Highlight */
 }
 
 button {
     padding: 0 25px;
-    background-color: #ffcc00; /* ICCT Gold */
-    color: #003366; /* ICCT Navy */
+    background-color: #ffcc00; 
+    color: #003366; 
     border: none;
     border-radius: 30px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 1rem;
-    transition: transform 0.1s, background-color 0.2s;
-}
-
-button:hover {
-    background-color: #e6b800;
-}
-
-button:active {
-    transform: scale(0.95);
 }
 
 /* ==========================================
-   5. UTILS
+   6. TYPOGRAPHY & SPACING
    ========================================== */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Custom Scrollbar */
-#chat-box::-webkit-scrollbar {
-    width: 6px;
+.ai-msg p { margin-bottom: 12px; }
+.ai-msg ul, .ai-msg ol { margin: 10px 0 10px 20px; }
+.ai-msg li { margin-bottom: 6px; }
+.ai-msg strong { color: #003366; font-weight: 700; }
+
+/* ==========================================
+   7. NEW: DASHBOARD SIDEBAR (LEFT)
+   ========================================== */
+.dashboard-sidebar {
+    width: 450px;
+    height: 90vh;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
-#chat-box::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
+
+.dash-header {
+    background: #003366; /* ICCT Navy */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.note-section {
+    background: rgba(248, 249, 250, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+}
+
+.note-section h3 {
+    font-size: 0.9rem;
+    color: #003366;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ffcc00; /* ICCT Gold */
+    padding-bottom: 5px;
+}
+
+.note-section ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.note-section li {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    color: #333;
+}
+
+/* Links/Buttons inside sidebar */
+.link-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.link-btn {
+    background: white;
+    border: 1px solid #003366;
+    color: #003366;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.link-btn:hover {
+    background: #ffcc00;
+    border-color: #ffcc00;
+    transform: translateY(-2px);
+}
+
+/* Circular badge - Larger size for high visibility */
+.logo-badge {
+    background: rgba(255, 255, 255, 0.95);
+    width: 100px; /* Increased from 50px */
+    height: 100px; /* Increased from 50px */
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 18px;
+    flex-shrink: 0; /* Prevents the circle from squishing */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    padding: 6px;
+    border: 2px solid #ffcc00; /* Added gold border to match ICCT colors */
+}
+
+.logo-badge img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+/* Header - Adjusted for the larger logo */
+.dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 20px; /* Adjusted padding */
+    min-height: 85px; /* Ensures the header is tall enough for the 65px logo */
+    background-color: #003366;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    white-space: nowrap;
 }
