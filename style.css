@@ -1,151 +1,155 @@
-/* General Reset */
-body {
+/* ==========================================
+   1. GLOBAL STYLES & BACKGROUND
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #e9ecef;
+}
+
+body {
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+    overflow: hidden;
 }
 
-#chat-container {
-    width: 450px; /* Slightly wider for better reading */
-    height: 600px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+/* ==========================================
+   2. MAIN CONTAINER
+   ========================================== */
+.chat-container {
+    width: 100%;
+    max-width: 800px;
+    height: 90vh;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    border-top: 6px solid #0A315A; /* ICCT Blue */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 12px;
 }
 
-/* Header Styling */
-#header {
-    background-color: #0A315A;
-    color: #FAD35F; /* ICCT Gold */
-    padding: 15px 20px;
+h2 {
+    padding: 20px;
+    background-color: #003366; /* ICCT Navy Blue */
+    color: white;
     text-align: center;
-    border-bottom: 1px solid rgba(250, 211, 95, 0.2);
+    font-weight: 600;
+    border-radius: 12px 12px 0 0;
+    font-size: 1.5rem;
 }
 
-#header h2 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; }
-#header p { 
-    margin: 5px 0 0; 
-    font-size: 0.75rem; 
-    opacity: 0.8; 
-    background: none; 
-    color: #FAD35F;
-    padding: 0;
-}
-
-/* Chat Box Area */
+/* ==========================================
+   3. CHAT AREA & BUBBLES
+   ========================================== */
 #chat-box {
     flex: 1;
-    padding: 20px;
     overflow-y: auto;
+    padding: 25px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: #f8f9fa;
-    scroll-behavior: smooth;
+    background: #f8f9fa;
 }
 
-/* Markdown & Message Styling */
+/* Base style for all messages */
 .user-msg, .ai-msg {
-    padding: 12px 16px;
-    border-radius: 18px;
-    max-width: 85%;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    word-wrap: break-word;
-    animation: fadeIn 0.3s ease;
+    max-width: 80%;
+    padding: 12px 18px;
+    line-height: 1.6;
+    font-size: 1rem;
+    animation: fadeIn 0.3s ease-in;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+/* User Bubble (Right Side) */
 .user-msg {
     align-self: flex-end;
-    background-color: #0A315A;
+    background-color: #0056b3;
     color: white;
-    border-bottom-right-radius: 2px;
-    box-shadow: 0 4px 10px rgba(10, 49, 90, 0.2);
+    border-radius: 18px 18px 0 18px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
+/* AI Bubble (Left Side) */
 .ai-msg {
     align-self: flex-start;
-    background-color: #ffffff;
+    background-color: white;
     color: #333;
-    border-bottom-left-radius: 2px;
-    border: 1px solid #dee2e6;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-radius: 18px 18px 18px 0;
+    border: 1px solid #e1e4e8;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* Markdown Support (for marked.js) */
-.ai-msg p { margin: 0 0 10px 0; background: none; padding: 0; max-width: 100%; }
-.ai-msg ul, .ai-msg ol { padding-left: 25px; margin: 10px 0; }
-.ai-msg li { margin-bottom: 5px; }
-
-/* Code Blocks Styling */
+/* Markdown styling within AI messages */
 .ai-msg pre {
-    background: #272822;
+    background: #2d2d2d;
     color: #f8f8f2;
     padding: 10px;
     border-radius: 8px;
     overflow-x: auto;
-    font-family: 'Consolas', monospace;
-    font-size: 0.85rem;
+    margin: 10px 0;
 }
 
 .ai-msg code {
-    background: #f1f1f1;
-    padding: 2px 5px;
+    font-family: 'Courier New', Courier, monospace;
+    background: #eee;
+    padding: 2px 4px;
     border-radius: 4px;
-    font-family: 'Consolas', monospace;
-    color: #d63384;
 }
 
-/* Input Area Styling */
-#input-area {
-    display: flex;
+/* ==========================================
+   4. INPUT AREA
+   ========================================== */
+.input-area {
     padding: 20px;
-    background: #fff;
+    background: white;
     border-top: 1px solid #eee;
+    display: flex;
+    gap: 12px;
 }
 
 #user-input {
     flex: 1;
-    padding: 12px;
-    border: 2px solid #eee;
-    border-radius: 8px;
+    padding: 14px 20px;
+    border: 2px solid #e1e4e8;
+    border-radius: 30px;
     outline: none;
-    transition: border-color 0.3s;
+    font-size: 1rem;
+    transition: border-color 0.2s;
 }
 
 #user-input:focus {
-    border-color: #0A315A;
+    border-color: #ffcc00; /* ICCT Gold Highlight */
 }
 
 button {
-    background-color: #FAD35F;
-    color: #0A315A;
+    padding: 0 25px;
+    background-color: #ffcc00; /* ICCT Gold */
+    color: #003366; /* ICCT Navy */
     border: none;
-    padding: 0 20px;
-    margin-left: 10px;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 30px;
     cursor: pointer;
-    transition: all 0.3s;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: transform 0.1s, background-color 0.2s;
 }
 
 button:hover {
-    background-color: #0A315A;
-    color: #FAD35F;
-    transform: translateY(-2px);
+    background-color: #e6b800;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* ==========================================
+   5. UTILS
+   ========================================== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Custom Scrollbar */
@@ -153,6 +157,6 @@ button:hover {
     width: 6px;
 }
 #chat-box::-webkit-scrollbar-thumb {
-    background-color: #cccccc;
+    background: #ccc;
     border-radius: 10px;
 }
