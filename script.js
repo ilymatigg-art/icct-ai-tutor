@@ -1,6 +1,7 @@
 // =========================
 // MEMORY SYSTEM
 // =========================
+// This keeps track of the last few messages so the AI remembers the conversation
 let chatHistory = [];
 
 // =========================
@@ -13,7 +14,7 @@ async function sendMessage() {
 
     if (!userInput) return;
 
-    // 1. Show user message
+    // 1. Show user message in the chat box
     chatBox.innerHTML += `<div class="user-msg"><b>You:</b> ${userInput}</div>`;
     inputField.value = "";
 
@@ -25,17 +26,17 @@ async function sendMessage() {
         </div>
     `;
     
-    // Auto-scroll to bottom
+    // Auto-scroll to show the loading state
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // Add to memory
+    // Add user's message to history
     chatHistory.push({ role: "user", content: userInput });
 
-    // Keep memory small (prevents performance issues)
+    // Keep memory small to stay within API limits and maintain speed
     if (chatHistory.length > 8) chatHistory.shift();
 
     try {
-        // CHANGED: Using your official Render URL
+        // Fetch request to your live Render backend
         const response = await fetch("https://icct-ai-tutor.onrender.com/chat", {
             method: "POST",
             headers: {
@@ -100,14 +101,14 @@ IF ASKED "WHAT ARE YOU":
 
         const data = await response.json();
 
-        // 3. Remove the "Loading" message before showing the real answer
+        // 3. Remove the "Loading" message before showing the actual response
         const loadingElement = document.getElementById(loadingId);
         if (loadingElement) loadingElement.remove();
 
         if (data.choices && data.choices.length > 0) {
             let aiReply = data.choices[0].message.content;
 
-            // OUTPUT FILTER: Double check the AI doesn't break character
+            // OUTPUT FILTER: Ensure the AI stays in character
             if (
                 aiReply.toLowerCase().includes("openai") ||
                 aiReply.toLowerCase().includes("google") ||
@@ -117,19 +118,18 @@ IF ASKED "WHAT ARE YOU":
                 aiReply = "I am ICCT AI Tutor, created by Christian Mati to help students learn step-by-step.";
             }
 
-            // 4. USE MARKED.JS TO FORMAT THE REPLY
-            // This renders bold text, bullet points, and code snippets correctly
+            // 4. USE MARKED.JS TO FORMAT THE REPLY (Markdown to HTML)
             const formattedReply = marked.parse(aiReply);
 
-            // Show AI message
+            // Show the formatted AI message
             chatBox.innerHTML += `<div class="ai-msg"><b>AI:</b> ${formattedReply}</div>`;
 
-            // Save AI response to memory
+            // Save AI response to history
             chatHistory.push({ role: "assistant", content: aiReply });
         }
 
     } catch (err) {
-        // Clean up loading message if there is an error
+        // Clean up loading message if the connection fails
         const loadingElement = document.getElementById(loadingId);
         if (loadingElement) loadingElement.remove();
 
@@ -137,6 +137,6 @@ IF ASKED "WHAT ARE YOU":
         console.error("Fetch error:", err);
     }
 
-    // Final scroll to bottom
+    // Final scroll to show the new message
     chatBox.scrollTop = chatBox.scrollHeight;
 }
