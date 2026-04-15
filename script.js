@@ -29,7 +29,7 @@ async function sendMessage() {
     if (chatHistory.length > 8) chatHistory.shift();
 
     try {
-        const response = await fetch("http://localhost:3000/chat", {
+        const response = await fetch("https://icct-ai-tutor.onrender.com/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
