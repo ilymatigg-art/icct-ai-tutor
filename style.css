@@ -119,14 +119,14 @@ h2 {
    5. INPUT AREA
    ========================================== */
 .input-area {
-    padding: 15px 20px;
+    padding: 10px 15px;
     background: white;
     border-top: 1px solid #eee;
     display: flex;
-    gap: 12px;
+    gap: 10px;
     border-radius: 0 0 12px 12px;
     align-items: center; /* Keeps button and text box perfectly leveled */
-    min-height: 80px;    /* Prevents the area from collapsing on mobile */
+    min-height: auto;    /* Prevents the area from collapsing on mobile */
 }
 
 #user-input {
@@ -293,56 +293,55 @@ button:active {
 @media (max-width: 768px) {
     body {
         flex-direction: column;
-        justify-content: flex-start; /* Aligns items from the top */
-        height: 100vh; /* Keeps the body strictly to the screen height */
-        padding: 10px;
-        overflow: hidden; /* Prevents the whole page from wobbling */
+        height: 100vh; /* Lock the screen height */
+        padding: 5px;
+        gap: 10px;
+        overflow: hidden; /* Stop the whole page from scrolling */
     }
 
+    /* THE BALANCE: 30% height for the Dashboard */
     .dashboard-sidebar {
         width: 100%;
-        height: auto;
-        max-height: 25vh; /* Restricted: Notes only take up 1/4 of the screen */
-        margin-bottom: 10px;
+        height: 30vh; 
+        min-height: 180px;
         padding: 10px;
+        display: flex;
+        flex-direction: column;
     }
 
+    /* Make the list inside scrollable so it doesn't grow */
     .note-section {
-        max-height: 100px; /* Small scrollable area for notes */
-        overflow-y: auto;
+        flex: 1;
+        overflow-y: auto; 
+        font-size: 0.8rem;
     }
 
+    /* THE BALANCE: 65% height for the Chat */
     .chat-container {
         width: 100%;
-        flex: 1; /* This forces the chat box to fill the remaining space */
-        height: auto;
-        max-height: 65vh;
+        height: 65vh; 
+        flex: none; /* Don't let it grow beyond its 65% */
+    }
+
+    /* Shrink the header so more messages are visible */
+    h2 {
+        padding: 10px;
+        font-size: 1.1rem;
     }
 
     .dash-header {
-        padding: 8px;
-        min-height: 50px; /* Smaller header for mobile */
+        padding: 5px;
+        min-height: 50px;
+        font-size: 0.85rem;
     }
 
     .logo-badge {
-        width: 35px;
-        height: 35px;
+        width: 40px;
+        height: 40px;
     }
 
-    /* Fix for the Send Button escaping */
-    .input-area {
-        padding: 10px;
-        gap: 8px;
-        flex-wrap: nowrap; /* Forces input and button to stay on one line */
-    }
-
-    #user-input {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-
-    button {
-        padding: 0 15px;
-        white-space: nowrap; /* Prevents button text from breaking */
+    /* Hide the website buttons on mobile to save space if needed */
+    .link-grid {
+        display: none; 
     }
 }
